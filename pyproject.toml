@@ -21,4 +21,4 @@ build-backend = "hatchling.build"
 packages = ["src/saver"]
 
 [project.scripts]
-saver = "saver.main:main"
+saver = "saver.cli:main"
