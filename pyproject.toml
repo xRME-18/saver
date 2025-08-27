@@ -1,0 +1,24 @@
+[project]
+name = "saver"
+version = "0.1.0"
+description = "App-based text capture system for LLM context management"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pynput>=1.7.6",
+    "pyobjc-framework-cocoa>=10.0; sys_platform == 'darwin'",
+    "pywin32>=306; sys_platform == 'win32'",
+    "python-xlib>=0.33; sys_platform == 'linux'",
+    "pyyaml>=6.0",
+    "schedule>=1.2.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/saver"]
+
+[project.scripts]
+saver = "saver.main:main"

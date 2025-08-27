@@ -1,0 +1,22 @@
+capture:
+  save_interval_seconds: 300  # 5 minutes
+  min_chars_threshold: 10
+  enabled: true
+
+apps:
+  mode: "exclude"  # "include" or "exclude"
+  include_list: []
+  exclude_list:
+    - "1Password"
+    - "Keychain Access"
+    - "Activity Monitor"
+    - "System Preferences"
+    - "Calculator"
+
+storage:
+  database_path: "data/captures.db"
+  auto_cleanup_days: 30
+
+security:
+  exclude_password_fields: true
+  pause_on_secure_input: true
