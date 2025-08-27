@@ -3,23 +3,27 @@ import sys
 import time
 import threading
 from datetime import datetime
-from .config import Config
-from .key_listener import KeyListener
-from .app_monitor import AppMonitor
+from typing import Optional
+
+from ..monitors.key_listener import KeyListener
+from ..monitors.app_monitor import AppMonitor
 from .buffer_manager import BufferManager
-from .storage_handler import StorageHandler
+from ..storage.sqlite_handler import StorageHandler
+from .config import Config
 
 
-class Saver:
-    def __init__(self):
-        self.config = Config()
+class CaptureEngine:
+    """Core capture engine that coordinates all components"""
+    
+    def __init__(self, config_path: str = "config/config.yaml"):
+        self.config = Config(config_path)
         self.buffer_manager = BufferManager()
         self.storage_handler = StorageHandler(self.config.get_database_path())
         self.key_listener = KeyListener(self._on_key_press)
         self.app_monitor = AppMonitor(self._on_app_change)
         
         self.running = False
-        self.save_timer = None
+        self.save_timer: Optional[threading.Timer] = None
         
         # Register signal handlers for clean shutdown
         signal.signal(signal.SIGINT, self._signal_handler)
@@ -131,7 +135,7 @@ class Saver:
             
         print("Saver stopped")
         
-    def status(self):
+    def get_statistics(self):
         stats = self.storage_handler.get_statistics()
         current_buffers = self.buffer_manager.get_all_apps()
         
@@ -149,28 +153,3 @@ class Saver:
                 
         if current_buffers:
             print(f"\nActive apps with buffers: {', '.join(current_buffers)}")
-
-
-def main():
-    if len(sys.argv) > 1:
-        command = sys.argv[1].lower()
-        
-        if command == "status":
-            saver = Saver()
-            saver.status()
-            return
-        elif command == "help":
-            print("Saver - App-based text capture system")
-            print("Usage:")
-            print("  saver         # Start capturing")
-            print("  saver status  # Show statistics")
-            print("  saver help    # Show this help")
-            return
-    
-    # Default action: start capturing
-    saver = Saver()
-    saver.start()
-
-
-if __name__ == "__main__":
-    main()
