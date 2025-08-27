@@ -1,0 +1,14 @@
+[run]
+source = src/saver
+omit = 
+    */tests/*
+    */__init__.py
+    */__main__.py
+
+[report]
+precision = 2
+show_missing = True
+skip_covered = False
+
+[html]
+directory = htmlcov
