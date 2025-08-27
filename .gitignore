@@ -8,3 +8,17 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Data storage (contains captured text and embeddings)
+/data
+/qdrant_storage
+
+# User configuration (may contain personal settings)
+config.yaml.local
+*.db
+*.db-*
+
+# Logs and temporary files
+*.log
+.DS_Store
+/data
